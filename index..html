@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jeel Doshi — Graphic Designer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    /* ─── CSS Variables ─── */
+    :root {
+      --bg: #0e0c0a;
+      --surface: #181410;
+      --gold: #c9a96e;
+      --gold-light: #e2c899;
+      --cream: #f5f0e8;
+      --muted: #7a7060;
+      --text: #e8e0d0;
+      --accent: #c9a96e;
+      --border: rgba(201,169,110,0.18);
+      --ff-head: 'Playfair Display', serif;
+      --ff-body: 'DM Sans', sans-serif;
+    }
+
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--ff-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── Grain Overlay ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 5vw;
+      background: rgba(14,12,10,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--ff-head);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ─── Sections ─── */
+    section { display: none; min-height: 100vh; padding: 120px 5vw 80px; }
+    section.active { display: block; animation: fadeUp 0.6s ease both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── HOME ─── */
+    #home {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding-top: 80px;
+    }
+    #home.active { display: flex; }
+
+    .home-photo-wrap {
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      overflow: hidden;
+      margin-bottom: 2.2rem;
+      box-shadow: 0 0 60px rgba(201,169,110,0.15);
+      animation: fadeUp 0.7s ease both;
+    }
+    .home-photo-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Placeholder avatar when no real photo */
+    .avatar-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #2a2010, #1a1408);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-head);
+      font-size: 4rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .home-name {
+      font-family: var(--ff-head);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--cream);
+      animation: fadeUp 0.7s 0.1s ease both;
+      opacity: 0;
+    }
+    .home-name em { color: var(--gold); font-style: italic; }
+
+    .home-tagline {
+      margin-top: 1.2rem;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: var(--muted);
+      max-width: 520px;
+      animation: fadeUp 0.7s 0.2s ease both;
+      opacity: 0;
+    }
+
+    .home-ctas {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      margin-top: 2.5rem;
+      animation: fadeUp 0.7s 0.3s ease both;
+      opacity: 0;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 2rem;
+      border-radius: 2px;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: var(--ff-body);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: #0e0c0a;
+      border: 1px solid var(--gold);
+    }
+    .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); }
+    .btn-outline {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--gold); background: rgba(201,169,110,0.06); }
+
+    .home-contact {
+      margin-top: 3.5rem;
+      display: flex; gap: 2.5rem;
+      animation: fadeUp 0.7s 0.4s ease both;
+      opacity: 0;
+    }
+    .home-contact-item { text-align: center; }
+    .home-contact-item span {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+    .home-contact-item a, .home-contact-item p {
+      color: var(--gold-light);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .home-contact-item a:hover { text-decoration: underline; }
+
+    /* Decorative lines */
+    .home-deco {
+      position: absolute;
+      width: 1px; height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      bottom: 60px; left: 50%;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+    /* ─── SECTION HEADERS ─── */
+    .section-header { margin-bottom: 4rem; }
+    .section-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+    .section-title {
+      font-family: var(--ff-head);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    .section-line {
+      width: 48px; height: 1px;
+      background: var(--gold);
+      margin-top: 1.2rem;
+    }
+
+    /* ─── RESUME ─── */
+    #resume { max-width: 860px; margin: 0 auto; }
+    .resume-block { margin-bottom: 4rem; }
+    .resume-block-title {
+      font-family: var(--ff-head);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.6rem;
+      margin-bottom: 2rem;
+    }
+    .resume-item { display: flex; gap: 2rem; margin-bottom: 2rem; }
+    .resume-year {
+      min-width: 90px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      padding-top: 0.2rem;
+    }
+    .resume-content {}
+    .resume-role {
+      font-family: var(--ff-head);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .resume-content ul { padding-left: 1.2rem; }
+    .resume-content li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .resume-content p {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .tools-grid {
+      display: flex; flex-wrap: wrap; gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .tool-tag {
+      padding: 0.45rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-size: 0.78rem;
+      color: var(--gold-light);
+      letter-spacing: 0.08em;
+      background: rgba(201,169,110,0.04);
+      transition: all 0.3s;
+    }
+    .tool-tag:hover { border-color: var(--gold); background: rgba(201,169,110,0.1); }
+
+    /* ─── PROJECTS ─── */
+    #projects {}
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+      border-color: var(--gold);
+    }
+    .project-img {
+      width: 100%; height: 220px;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%) brightness(0.9);
+      transition: filter 0.4s;
+    }
+    .project-card:hover .project-img { filter: grayscale(0%) brightness(1); }
+    .project-img-placeholder {
+      width: 100%; height: 220px;
+      background: linear-gradient(135deg, #1e1a12, #2a2416);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .project-body { padding: 1.6rem; }
+    .project-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .project-title {
+      font-family: var(--ff-head);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.8rem;
+    }
+    .project-desc {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .project-desc ul { padding-left: 1.1rem; }
+    .project-desc li { margin-bottom: 0.3rem; }
+
+    /* ─── PORTFOLIO ─── */
+    #portfolio {}
+    .portfolio-intro {
+      max-width: 560px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .portfolio-item {
+      aspect-ratio: 4/3;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.4s, border-color 0.4s;
+    }
+    .portfolio-item:hover { transform: scale(1.02); border-color: var(--gold); }
+    .portfolio-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .portfolio-item-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1e1a12, #2a2416);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: rgba(14,12,10,0.7);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+    .portfolio-overlay span {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+
+    /* ─── Footer ─── */
+    footer {
+      text-align: center;
+      padding: 2.5rem 5vw;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── Mobile Nav ─── */
+    @media (max-width: 600px) {
+      .nav-links { gap: 1.2rem; }
+      .nav-links a { font-size: 0.72rem; letter-spacing: 0.08em; }
+      .resume-item { flex-direction: column; gap: 0.4rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <nav>
+    <a class="nav-logo" href="#" onclick="showSection('home')">JD</a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showSection('home')">Home</a></li>
+      <li><a href="#" onclick="showSection('resume')">Resume</a></li>
+      <li><a href="#" onclick="showSection('projects')">Projects</a></li>
+      <li><a href="#" onclick="showSection('portfolio')">Portfolio</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── HOME ─── -->
+  <section id="home" class="active">
+    <div class="home-photo-wrap">
+      <!-- 
+        TO USE YOUR OWN PHOTO:
+        Replace the div below with:
+        <img src="your-photo.jpg" alt="Jeel Doshi" />
+      -->
+      <div class="avatar-placeholder">JD</div>
+    </div>
+
+    <h1 class="home-name">Jeel <em>Doshi</em></h1>
+    <p class="home-tagline">
+      A graphic designer who turns ideas into visuals that speak before words do.
+      I craft brands, designs, and experiences that leave a lasting impression.
+    </p>
+
+    <div class="home-ctas">
+      <a class="btn btn-gold" href="#" onclick="showSection('resume')">My Resume</a>
+      <a class="btn btn-outline" href="#" onclick="showSection('projects')">My Projects</a>
+    </div>
+
+    <div class="home-contact">
+      <div class="home-contact-item">
+        <span>Phone</span>
+        <a href="tel:9022756279">9022 7562 79</a>
+      </div>
+      <div class="home-contact-item">
+        <span>Email</span>
+        <a href="mailto:jdoshi154@gmail.com">jdoshi154@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="home-deco"></div>
+  </section>
+
+  <!-- ─── RESUME ─── -->
+  <section id="resume">
+    <div class="section-header">
+      <span class="section-eyebrow">Background</span>
+      <h2 class="section-title">Resume</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- Work Experience -->
+    <div class="resume-block">
+      <div class="resume-block-title">Work Experience</div>
+
+      <div class="resume-item">
+        <div class="resume-year">2019 – 2023</div>
+        <div class="resume-content">
+          <div class="resume-role">Customer Service Associate — CMA CGM</div>
+          <ul>
+            <li>Managed customer interactions and ensured smooth communication between clients and the company</li>
+            <li>Developed strong attention to detail and professional communication skills</li>
+            <li>Transitioned from this role to pursue a full-time career in graphic design, driven by a genuine passion for visual creativity</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="resume-item">
+        <div class="resume-year">2024 – 2026</div>
+        <div class="resume-content">
+          <div class="resume-role">Graphic Designer — Local Design Studio</div>
+          <ul>
+            <li>Designed posters, logos, and illustrations for various client projects</li>
+            <li>Delivered creative visuals aligned with client branding and goals</li>
+            <li>Worked across multiple design styles to meet diverse project requirements</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="resume-block">
+      <div class="resume-block-title">Education</div>
+      <div class="resume-item">
+        <div class="resume-year">2019</div>
+        <div class="resume-content">
+          <div class="resume-role">Bachelor of Commerce — University of Mumbai</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design Tools -->
+    <div class="resume-block">
+      <div class="resume-block-title">Design Tools</div>
+      <div class="tools-grid">
+        <div class="tool-tag">Adobe Illustrator</div>
+        <div class="tool-tag">Adobe Photoshop</div>
+        <div class="tool-tag">Adobe After Effects</div>
+        <div class="tool-tag">CorelDRAW</div>
+        <div class="tool-tag">Canva</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROJECTS ─── -->
+  <section id="projects">
+    <div class="section-header">
+      <span class="section-eyebrow">Work</span>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- Project 1 -->
+      <div class="project-card">
+        <!-- 
+          TO USE YOUR OWN IMAGE:
+          Replace the placeholder div below with:
+          <img class="project-img" src="verdana-logo" alt="Verdana Coffee Co." />
+        -->
+        <img
+          class="project-img"
+          src="Verdana Logo.jpg"
+          alt="Verdana Coffee Co. Brand Identity"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="project-img-placeholder" style="display:none;">Brand Identity</div>
+        <div class="project-body">
+          <div class="project-label">Brand Identity</div>
+          <div class="project-title">Verdana Coffee Co.</div>
+          <div class="project-desc">
+            <ul>
+              <li>Complete brand identity for a single origin coffee brand from India</li>
+              <li>Minimal yet premium logo combining a mountain emblem with classic serif typography</li>
+              <li>The mountain symbol represents the high-altitude origins of single origin coffee</li>
+              <li>Warm earthy palette of deep brown and cream reflecting the richness of coffee</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card">
+        <img
+          class="project-img"
+         src="package design.jpg"
+          alt="Project 02"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="project-img-placeholder" style="display:none;">Project 02</div>
+        <div class="project-body">
+          <div class="project-label">Packaging Design</div>
+          <div class="project-title">Glow Lab</div>
+          <div class="project-desc">
+            <!-- ✏️ EDIT THIS: Replace with your project description -->
+            <p><ul>
+  <li>Designed a complete pouch packaging series for Glow Lab, a clean skincare brand</li>
+  <li>Created three product variants — Face Wash, Face Cream, and Bright Serum</li>
+  <li>Used earthy, natural tones (sage green, terracotta, and olive) to reflect organic ingredients</li>
+  <li>Incorporated abstract organic shapes and minimal typography for a premium feel</li>
+ 
+</ul></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card">
+        <img
+          class="project-img"
+          src="tshirt.jpg"
+          alt="Project 03"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="project-img-placeholder" style="display:none;">Project 03</div>
+        <div class="project-body">
+          <div class="project-label">T-Shirt / Merchandise Design</div>
+          <div class="project-title">Urban Roots Co.</div>
+          <div class="project-desc">
+            <ul>
+      <li>Designed a T-shirt and merchandise collection for Urban Roots Co., a streetwear brand</li>
+      <li>Created a mountain and rising sun badge graphic</li>
+      <li>Used gold on black for a premium, timeless streetwear aesthetic</li>
+        </ul>
+  </div>
+</div>
+
+      <!-- ✏️ ADD MORE PROJECTS: Copy one of the cards above and paste here -->
+
+    </div>
+  </section>
+
+  <!-- ─── PORTFOLIO ─── -->
+  <section id="portfolio">
+    <div class="section-header">
+      <span class="section-eyebrow">Gallery</span>
+      <h2 class="section-title">Portfolio</h2>
+      <div class="section-line"></div>
+    </div>
+    <p class="portfolio-intro">
+      A visual showcase of select work across illustration, and graphic design.
+    </p>
+
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+  <img src="updhyan poster.jpg" alt="Description" />
+  <div class="portfolio-overlay">
+    <a href="updhyan poster.jpg" target="_blank"><span>View Work</span></a>
+  </div>
+</div>
+      <div class="portfolio-item">
+  <img src="csr brochure.l.jpg" alt="Description" />
+  <div class="portfolio-overlay">
+    <a href="CSR Brochure.pdf" target="_blank"><span>View Work</span></a>
+  </div>
+      </div>
+      <div class="portfolio-item">
+  <img src="the girnar 98.jpg" alt="Description" />
+  <div class="portfolio-overlay">
+    <a href="the girnar 98.jpg" target="_blank"><span>View Work</span></a>
+  </div>
+      </div>
+     <div class="portfolio-item">
+  <img src="poster ...jpeg" alt="Description" />
+  <div class="portfolio-overlay">
+    <a href="poster ...jpeg" target="_blank"><span>View Work</span></a>
+  </div>
+ 
+
+    <!-- ─── FOOTER ─── -->
+  <footer>
+    <p>© 2026 Jeel Doshi &nbsp;·&nbsp; Graphic Designer &nbsp;·&nbsp; Mumbai, India</p>
+  </footer>
+
+  <!-- ─── JS ─── -->
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(id);
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleSubmit() {
+      const fname = document.getElementById('fname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if (!fname || !email) {
+        alert('Please fill in your name and email.');
+        return;
+      }
+      alert('Thank you, ' + fname + '! Your message has been received.\n\n(Connect a form service like Formspree to enable real submissions.)');
+    }
+  </script>
+
+</body>
+</html>
